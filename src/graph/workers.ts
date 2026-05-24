@@ -7,6 +7,7 @@
  */
 import { Command } from "@langchain/langgraph";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
+import type { BaseChatModel } from "@langchain/core/language_models/chat_models";
 import type { StructuredToolInterface } from "@langchain/core/tools";
 
 import { getLlm } from "../llm/provider.js";
@@ -19,9 +20,23 @@ interface WorkerConfig {
   tools?: StructuredToolInterface[];
 }
 
+/**
+ * Bind tools only if the model supports it. Real providers (ChatOpenAI,
+ * ChatAnthropic, etc.) implement `bindTools`; the offline `FakeListChatModel`
+ * used in CI does not. Calling unconditionally throws.
+ */
+function bindToolsIfSupported(
+  llm: BaseChatModel,
+  tools: StructuredToolInterface[] | undefined,
+) {
+  if (!tools || tools.length === 0) return llm;
+  if (typeof llm.bindTools !== "function") return llm;
+  return llm.bindTools(tools);
+}
+
 export function makeWorker(cfg: WorkerConfig) {
   return async function workerNode(state: GraphStateValue): Promise<Command> {
-    const llm = cfg.tools && cfg.tools.length > 0 ? getLlm().bindTools(cfg.tools) : getLlm();
+    const llm = bindToolsIfSupported(getLlm(), cfg.tools);
     const messages = [new SystemMessage(cfg.rolePrompt), ...state.messages];
     const reply = await llm.invoke(messages);
 
