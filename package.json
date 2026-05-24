@@ -1,0 +1,37 @@
+{
+  "name": "langgraph-ts-agents",
+  "version": "0.1.0",
+  "private": false,
+  "description": "TypeScript port of LangGraph supervisor/worker patterns — streaming-first, fully typed.",
+  "author": "Ale Zanello <me@azanello.com>",
+  "license": "MIT",
+  "repository": "github:AleSZanello/langgraph-ts-agents",
+  "homepage": "https://azanello.com",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "packageManager": "pnpm@9.0.0",
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@langchain/core": "^0.3.0",
+    "@langchain/langgraph": "^0.2.0",
+    "@langchain/openai": "^0.3.0",
+    "@langchain/anthropic": "^0.3.0",
+    "dotenv": "^16.4.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  }
+}

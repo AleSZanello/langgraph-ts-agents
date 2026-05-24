@@ -1,0 +1,14 @@
+node_modules/
+dist/
+*.tsbuildinfo
+.turbo/
+.env
+.env.local
+.env.*.local
+npm-debug.log*
+pnpm-debug.log*
+.vscode/
+.idea/
+*.swp
+.DS_Store
+coverage/
